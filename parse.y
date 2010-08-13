@@ -1266,7 +1266,7 @@ aref_args	: none
 		| tSTAR arg opt_nl
 		    {
 			value_expr($2);
-			$$ = NEW_NEWLINE(NEW_SPLAT($2));
+			$$ = NEW_NEWLINE_LONGLIFE(NEW_SPLAT($2));
 		    }
 		;
 
@@ -4647,7 +4647,7 @@ newline_node(node)
 	if (nd_type(node) == NODE_NEWLINE) return node;
 	line = nd_line(node);
 	node = remove_begin(node);
-	nl = NEW_NEWLINE(node);
+	nl = NEW_NEWLINE_LONGLIFE(node);
 	nd_set_line(nl, line);
 	nl->nd_nth = line;
     }
@@ -4837,12 +4837,12 @@ literal_concat(head, tail)
       case NODE_EVSTR:
 	if (htype == NODE_STR) {
 	    nd_set_type(head, NODE_DSTR);
-	    REMEMBER(head);
 	    head->nd_alen = 1;
 	}
 	list_append(head, tail);
 	break;
     }
+    REMEMBER(head);
     return head;
 }
 
